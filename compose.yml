@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  rohan_postgres:
+    image: 'postgres:16'
+    environment:
+      - 'POSTGRES_DB=rohandb'
+      - 'POSTGRES_PASSWORD=rohanpassword'
+      - 'POSTGRES_USER=rohanuser'
+    ports:
+      - "35432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgresql:/var/lib/postgresql/
+    networks:
+      - backend
+
+  app:
+    build: .
+    ports:
+      - "8083:8083"
+    depends_on:
+      rohan_postgres:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://liljvrn.ru:8083/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    networks:
+      - backend
+
+volumes:
+  postgresql: { }
+
+networks:
+  backend:
+    driver: bridge

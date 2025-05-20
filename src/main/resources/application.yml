@@ -1,0 +1,66 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: biblim-rohan
+  datasource:
+    url: jdbc:postgresql://localhost:35432/rohandb
+    username: rohanuser
+    password: rohanpassword
+    driverClassName: org.postgresql.Driver
+  flyway:
+    enabled: true
+    validate-on-migrate: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+cloud:
+  aws:
+    credentials:
+      access-key: text
+      secret-key: text
+    region: ru-central1
+    endpoint: https://storage.yandexcloud.net
+    bucket-name:
+      BOOK: lib-e-book
+      REPORT: lib-report
+
+grpc:
+  client:
+    gandalf:
+      address: localhost:9098
+      negotiation-type: plaintext
+
+api:
+  management:
+    header: "X-MANAGEMENT-API"
+    key: "ROHAN"
+  internal:
+    header: "X-INTERNAL-API"
+    services:
+      booker: text
+      gandalf: text
+      okarun: text
+
+management:
+  endpoint:
+    health:
+      access: unrestricted
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+  server:
+    port: 8083
