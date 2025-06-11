@@ -11,6 +11,7 @@ import ru.liljvrn.biblimrohan.domain.repositories.ReportRepository
 import ru.liljvrn.biblimrohan.support.mapper.toDto
 import ru.liljvrn.biblimrohan.support.pageRequest
 import ru.liljvrn.biblimrohan.support.pdf.ReportPdfGenerator
+import java.time.ZoneId
 import java.util.*
 
 @Service
@@ -30,6 +31,7 @@ class ReportService(
         pdfDocumentClient.getPresignedUrl(reportId.toString(), FileType.REPORT)
 
     fun getReports(page: Int): Page<Report> = pageRequest(page) {
-        reportRepository.findAll(it).map { report -> report.toDto() }
+        reportRepository.findAll(it)
+            .map { report -> report.toDto().apply { createdAt.atZone(ZoneId.of("Europe/Moscow")) } }
     }
 }

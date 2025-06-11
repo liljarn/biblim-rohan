@@ -14,6 +14,7 @@ import com.itextpdf.layout.properties.TextAlignment
 import ru.liljvrn.biblimrohan.domain.models.dto.BookReport
 import java.io.ByteArrayOutputStream
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 object ReportPdfGenerator {
@@ -56,9 +57,9 @@ object ReportPdfGenerator {
             .setBold()
         document.add(title)
 
-        val dateTime = LocalDateTime.now()
+        val dateTime = LocalDateTime.now(ZoneId.of("Europe/Moscow"))
             .format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))
-        val dateTimeP = Paragraph("Дата и время создания отчета: $dateTime")
+        val dateTimeP = Paragraph("Дата и время создания отчета (московское время): $dateTime")
             .setFontSize(12f)
             .setTextAlignment(TextAlignment.RIGHT)
         document.add(dateTimeP)
