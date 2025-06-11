@@ -18,7 +18,10 @@ class S3Configuration(
 
         return S3Client.builder()
             .credentialsProvider {
-                AwsBasicCredentials.create(properties.credentials.accessKey, properties.credentials.secretKey)
+                AwsBasicCredentials.create(
+                    properties.credentials.accessKey,
+                    properties.credentials.secretKey
+                )
             }
             .region(Region.of(properties.region))
             .endpointOverride(URI.create(properties.endpoint))
